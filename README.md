@@ -1,13 +1,15 @@
 # Homie
 
-Python implementation of Homie 3.0.1
+Python implementation of Homie 4.0.0
 
-Class based system to easily add Homie 3.0.1 support to devices.
+Class based system to easily add Homie 4.0.0 support to devices.
+
+Supports the Meta, Statistics, and Firmware extensions
 
 Install
 
 ~~~~
-pip install Homie3
+pip install Homie4
 ~~~~
 
 
