@@ -2,6 +2,8 @@
 
 import sys
 import time
+import atexit
+from datetime import datetime
 
 import homie
 
@@ -86,6 +88,11 @@ class Device_Base(object):
 
         self.mqtt_subscription_handlers = {}
 
+        atexit.register(self.cleanup)
+
+    def cleanup(self):
+        logger.debug ('clean up')
+        self.state = 'disconnected'
 
     def generate_device_id(self):
         #logger.debug ('Device instances {}'.format(instance_count))
@@ -152,9 +159,11 @@ class Device_Base(object):
     def publish_statastics(self, retain = True, qos = 1):
         self.publish("/".join((self.topic, "$stats/interval")),self.homie_settings ['update_interval'], retain, qos)
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
+        self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
     def publish_uptime(self, retain=True, qos=1):
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
+        self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
     def add_subscription(self,topic,handler,qos=0): #subscription list to the required MQTT topics, used by properties to catch set topics
         self.mqtt_subscription_handlers [topic] = handler

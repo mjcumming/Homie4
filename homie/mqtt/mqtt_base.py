@@ -47,7 +47,6 @@ class MQTT_Base (object):
 
     @mqtt_connected.setter
     def mqtt_connected(self,connected):
-        print ('mqtt connected',connected)
         if connected != self._mqtt_connected:
             logger.debug("MQTT Connected {} ".format(connected))
             self._mqtt_connected = connected
@@ -71,7 +70,6 @@ class MQTT_Base (object):
         logger.debug ('MQTT set will {}, topic {}'.format(will,topic))
 
     def get_mac_ip_address(self):
-
         if self.ip_address is None:
             self.ip_address = network_info.get_local_ip (self.mqtt_settings ['MQTT_BROKER'],self.mqtt_settings ['MQTT_PORT'])
 
@@ -84,7 +82,10 @@ class MQTT_Base (object):
         logger.debug ('MQTT On Message: Topic {}, Payload {}'.format(topic,payload))
         for device in self.homie_devices:
             if device.start_time is not None: #device is ready
-                device.mqtt_on_message(topic,payload) 
+                try:
+                    device.mqtt_on_message(topic,payload) 
+                except:
+                    logger.exception('on_message error')
 
     def _on_disconnect(self,rc):
         logger.debug ('MQTT On Disconnect: Result Code {}'.format(rc))

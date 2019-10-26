@@ -1,9 +1,6 @@
 
 from homie.support.helpers import validate_id
 
-# Ndee arrays not implemented
-
-
 class Node_Base(object):
 
     def __init__(self, device, id, name, type_, retain=True, qos=1):
