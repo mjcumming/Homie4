@@ -23,7 +23,7 @@ class My_Dimmer(Device_Dimmer):
 
 try:
 
-    dimmer = My_Dimmer(name = 'Test Dimmer',mqtt_settings=mqtt_settings)
+    dimmer = My_Dimmer(name = 'Test Dimmer', device_id = 'testdimmer', mqtt_settings=mqtt_settings)
     
     while True:
         dimmer.update_dimmer(0)
