@@ -12,7 +12,7 @@ mqtt_settings = {
 
 try:
 
-    contact = Device_Contact(name = 'Test Contact',mqtt_settings=mqtt_settings)
+    contact = Device_Contact(name = 'Test Contact', device_id='testcontact', mqtt_settings=mqtt_settings)
     
     while True:
         time.sleep(5)

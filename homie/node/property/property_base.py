@@ -77,7 +77,7 @@ class Property_Base(object):
     def value(self, value, retain=True, qos=1):
         if self.validate_value(value):
             self._value = value
-            self.publish (self.topic,value,retain,qos)
+            self.publish (self.topic,self.get_payload_from_value(value),retain,qos)
             logger.debug ('Value set to:   {}'.format(value))
         else:
             logger.warn ('Invalid Value: Device {} Node {} Property {} Value {}'.format(self.node.device.name,self.node.name,self.name,value))
@@ -85,8 +85,11 @@ class Property_Base(object):
     def validate_value(self,value):
         return True # override as needed
 
-    def get_value_from_payload(self,payload):
+    def get_value_from_payload(self,payload): #convert payload to a value we can use
         return payload
+    
+    def get_payload_from_value(self,value): #convert value to a payload for homie
+        return value
     
     @property
     def topic(self):

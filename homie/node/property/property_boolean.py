@@ -2,11 +2,11 @@ from .property_base import Property_Base
 
 class Property_Boolean(Property_Base):
 
-    def __init__(self, node, id, name, settable=True, retained=True, qos=1, unit=None, data_type='boolean', data_format=None, value=None, set_value=None):
-        super().__init__(node,id,name,settable,retained,qos,unit,'boolean',data_format,value,set_value)
+    def __init__(self, node, id, name, settable=True, retained=True, qos=1, unit=None, data_type='boolean', data_format=None, value=None, set_value=None, tags=[], meta={}):
+        super().__init__(node,id,name,settable,retained,qos,unit,'boolean',data_format,value,set_value,tags,meta)
 
     def validate_value(self, value):
-        return True # tests below validate
+        return isinstance(value,bool)
     
     def get_value_from_payload(self,payload):
         if payload == 'true':
