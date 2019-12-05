@@ -56,6 +56,8 @@ class Device_Base(object):
         instance_count = instance_count + 1
         self.instance_number = instance_count
 
+        self._mqtt_connected = False # mqtt connection status, true = connected
+
         if device_id is None:
             device_id=self.generate_device_id()
 
@@ -213,7 +215,7 @@ class Device_Base(object):
     def broadcast_handler(self,topic,payload):#TBD
         logger.debug ('Device MQTT Homie Broadcast:  Topic {}, Payload {}'.format(topic,payload))
 
-    def publish(self, topic, payload, retain=True, qos=1):
+    def publish(self, topic, payload, retain, qos):
         logger.debug('Device MQTT publish topic: {}, retain {}, qos {}, payload: {}'.format(topic,retain,qos,payload))
         self.mqtt_client.publish(topic, payload, retain=retain, qos=qos)
 
@@ -230,16 +232,24 @@ class Device_Base(object):
 
     def mqtt_on_connection(self,connected):
         logger.debug("Device MQTT Connected state is {}".format(connected))
+        #print("Device MQTT Connected state is {}".format(connected))
 
         if connected:
-            self.publish_attributes()
-            self.publish_nodes()
-            self.subscribe_topics()
-            if self.mqtt_client.using_shared_mqtt_client is False or self.instance_number == 1: # only set last will if NOT using shared client or if using shared client and this is the first device instance
-                self.mqtt_client.set_will("/".join((self.topic, "$state")), "lost", retain=True, qos=1)
-                logger.debug ('Device setting last will')
+            if self._mqtt_connected is False:
+                self._mqtt_connected = True
+                self.publish_attributes()
+                self.publish_nodes()
+                self.subscribe_topics()
+                if self.mqtt_client.using_shared_mqtt_client is False or self.instance_number == 1: # only set last will if NOT using shared client or if using shared client and this is the first device instance
+                    self.mqtt_client.set_will("/".join((self.topic, "$state")), "lost", retain=True, qos=1)
+                    logger.debug ('Device setting last will')
+        else:
+            self._mqtt_connected = False
 
-    def mqtt_on_message(self, topic, payload):
+    def mqtt_on_message(self, topic, payload, retain, qos):
         if topic in self.mqtt_subscription_handlers:
-            logger.debug ('Device MQTT Message: Topic {}, Payload {}'.format(topic,payload)) #for logging only, topic and handler for subsriptions above
-            self.mqtt_subscription_handlers [topic] (topic, payload)
+            logger.debug ('Device MQTT Message: Topic {}, Payload {} Retain {}  QOS {}'.format(topic,payload,retain,qos)) #for logging only, topic and handler for subsriptions above
+            if retain is False:
+                self.mqtt_subscription_handlers [topic] (topic, payload)
+            else:
+                logger.warn ('Device MQTT Message received with RETAIN TRUE: Topic {}, Payload {} Retain {}  QOS {}'.format(topic,payload,retain,qos)) #for logging only, topic and handler for subsriptions above

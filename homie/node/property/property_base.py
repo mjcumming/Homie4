@@ -74,7 +74,7 @@ class Property_Base(object):
         return self._value
 
     @value.setter
-    def value(self, value, retain=True, qos=1):
+    def value(self, value, retain=False, qos=1):
         if self.validate_value(value):
             self._value = value
             self.publish (self.topic,self.get_payload_from_value(value),retain,qos)
@@ -104,8 +104,8 @@ class Property_Base(object):
 
     def publish_attributes(self, retain=True, qos=1):
         self.publish ("/".join((self.topic, "$name")), self.name, retain, qos)
-        self.publish ("/".join((self.topic, "$settable")), self.settable, retain, qos)
-        self.publish ("/".join((self.topic, "$retained")), self.retained, retain, qos)
+        self.publish ("/".join((self.topic, "$settable")), str(self.settable).lower(), retain, qos)
+        self.publish ("/".join((self.topic, "$retained")), str(self.retained).lower(), retain, qos)
         if self.unit:
             self.publish ("/".join((self.topic, "$unit")), self.unit, retain, qos)
         if self.data_type:
@@ -155,7 +155,7 @@ class Property_Base(object):
             return {}
 
     def set_message_handler(self,topic,payload):
-        logger.debug ('MQTT Property Message:  Topic {}, Payload {}'.format(topic,payload))
+        logger.info ('MQTT Property Message:  Topic {}, Payload {}'.format(topic,payload))
         self.process_set_message(topic,payload)
 
     def process_set_message(self,topic,payload): #override as needed

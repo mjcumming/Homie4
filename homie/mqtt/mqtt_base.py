@@ -57,16 +57,16 @@ class MQTT_Base (object):
     def connect(self): #called by the device when its ready for the mqtt client to start, subclass to provide
         logger.debug("MQTT Connecting to {} as client {}".format(self.mqtt_settings ['MQTT_BROKER'],self.mqtt_settings['MQTT_CLIENT_ID']))
 
-    def publish(self, topic, payload, retain=True, qos=0): #subclass to provide
+    def publish(self, topic, payload, retain, qos): #subclass to provide
         logger.debug('MQTT publish topic: {}, payload: {}, retain {}, qos {}'.format(topic,payload,retain,qos))
 
-    def subscribe(self, topic, qos=0): #subclass to provide
+    def subscribe(self, topic, qos): #subclass to provide
         logger.debug('MQTT subscribe  topic: {}, qos {}'.format(topic,qos))
 
     def unsubscribe(self, topic): #subclass to provide
         logger.debug('MQTT unsubscribe  topic: {}'.format(topic))
 
-    def set_will(self,will,topic,retain=True,qos=1): #subclass to provide
+    def set_will(self,will,topic,retain,qos): #subclass to provide
         logger.debug ('MQTT set will {}, topic {}'.format(will,topic))
 
     def get_mac_ip_address(self):
@@ -78,12 +78,12 @@ class MQTT_Base (object):
 
         return self.mac_address, self.ip_address
 
-    def _on_message(self,topic,payload):
-        logger.debug ('MQTT On Message: Topic {}, Payload {}'.format(topic,payload))
+    def _on_message(self,topic,payload,retain,qos):
+        logger.debug ('MQTT On Message: Topic {}, Payload {} Reatin {} QOS {}'.format(topic,payload,retain,qos))
         for device in self.homie_devices:
             if device.start_time is not None: #device is ready
                 try:
-                    device.mqtt_on_message(topic,payload) 
+                    device.mqtt_on_message(topic,payload,retain==1,qos) 
                 except:
                     logger.exception('on_message error')
 

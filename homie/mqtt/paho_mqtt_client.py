@@ -60,11 +60,11 @@ class PAHO_MQTT_Client (MQTT_Base):
         except Exception as e:
             logger.warning ('MQTT Unable to connect to Broker {}'.format(e))
 
-    def publish(self, topic, payload, retain=True, qos=0):
+    def publish(self, topic, payload, retain, qos):
         MQTT_Base.publish(self,topic,payload,retain,qos)
         self.mqtt_client.publish(topic, payload, retain=retain, qos=qos)
     
-    def subscribe(self, topic, qos=0): #subclass to provide
+    def subscribe(self, topic, qos): #subclass to provide
         MQTT_Base.subscribe(self,topic,qos)
         self.mqtt_client.subscribe(topic,qos)
 
@@ -72,7 +72,7 @@ class PAHO_MQTT_Client (MQTT_Base):
         MQTT_Base.unsubscribe(self,topic)
         self.mqtt_client.unsubscribe(topic)
 
-    def set_will(self,will,topic,retain=True,qos=1):
+    def set_will(self,will,topic,retain,qos):
         MQTT_Base.set_will(self,will,topic,retain,qos)
         self.mqtt_client.will_set(will,topic,retain,qos)
 
@@ -83,7 +83,7 @@ class PAHO_MQTT_Client (MQTT_Base):
     def _on_message(self, client, userdata, msg):
         topic = msg.topic
         payload = msg.payload.decode("utf-8")
-        MQTT_Base._on_message(self,topic,payload)
+        MQTT_Base._on_message(self,topic,payload,msg.retain,msg.qos)
 
     def _on_disconnect(self,client,userdata,rc):
         self.mqtt_connected = False # note, change this uses the property setter, do not really need to catch this in the base class

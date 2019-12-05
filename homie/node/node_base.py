@@ -78,7 +78,6 @@ class Node_Base(object):
             #print ('NODE PUBLISH PROP ',property_.name)
             property_.publish_attributes(retain, qos)        
         
-
     def get_subscriptions(self):
         subscriptions = {}
         
