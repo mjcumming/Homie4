@@ -74,7 +74,7 @@ class Property_Base(object):
         return self._value
 
     @value.setter
-    def value(self, value, retain=False, qos=1):
+    def value(self, value, retain=True, qos=1):
         if self.validate_value(value):
             self._value = value
             self.publish (self.topic,self.get_payload_from_value(value),retain,qos)
