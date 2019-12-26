@@ -18,8 +18,8 @@ class Device_Dimmer(Device_Base):
         self.start()
 
     def update_dimmer(self,percent): #sends updates to clients
-        self.get_node('dimmer').update_dimmer(percent)
+        self.get_node('dimmer').update_dimmer(round(percent,0))
         logger.debug ('Dimmer Update {}'.format(percent))
 
     def set_dimmer(self,percent):#received commands from clients
-        logger.debug ('Dimmer Set {}'.format(percent))
+        logger.debug ('Dimmer Set {}'.format(round(percent,0)))
