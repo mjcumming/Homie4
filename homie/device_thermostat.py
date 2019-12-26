@@ -24,12 +24,12 @@ THERMOSTAT_SETTINGS = {
     'max_heat_setpoint' : 90,
     'min_heat_setpoint' : 60,    
     'fan_mode' : 'ON',
-    'fan_modes' : ['ON','AUTO'],
-    'hold_mode' : 'SCHEDULE',
-    'hold_modes' : ['SCHEDULE','TEMPORARY','PERMANENT'],
-    'system_mode' : 'OFF',
-    'system_modes' : ['OFF','HEAT','COOL','AUTO'],
-    'system_status' : 'OFF',
+    'fan_modes' : ['On','Auto'],
+    'hold_mode' : 'Schedule',
+    'hold_modes' : ['Schedule','Temporary','Permanent'],
+    'system_mode' : 'Off',
+    'system_modes' : ['Off','Heat','Cool','Auto'],
+    'system_status' : 'Off',
     'units' : 'F',
 }
 
