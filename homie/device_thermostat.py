@@ -29,7 +29,7 @@ THERMOSTAT_SETTINGS = {
     'hold_modes' : ['SCHEDULE','TEMPORARY','PERMANENT'],
     'system_mode' : 'OFF',
     'system_modes' : ['OFF','HEAT','COOL','AUTO'],
-    'system status' : 'OFF',
+    'system_status' : 'OFF',
     'units' : 'F',
 }
 
