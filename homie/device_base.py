@@ -148,7 +148,6 @@ class Device_Base(object):
         if 'firmware' in self.extensions:
             self.publish_firmware(retain, qos)
 
-
     def publish_firmware(self, retain = True, qos = 1):
         mac,ip = self.mqtt_client.get_mac_ip_address()
 
@@ -167,6 +166,32 @@ class Device_Base(object):
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
         self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
+    def publish_homeassistant(self):
+        #BurntTech Start
+
+        HASS_CONFIG = {
+            'switch': f'homeassistant/switch/{self.device_id}/config',
+            'dimmer': f'homeassistant/light/{self.device_id}/config',
+            # 'thermostat': f'/homeassistant/climate/thermostat-{device_id}/config',
+            'contact': f'homeassistant/sensor/{self.device_id}/config',
+            'fan': f'homeassistant/fan/{self.device_id}/config'
+        }
+
+        HASS_PAYLOADS = {
+            'switch': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/switch/switch/set","state_topic": "homie/{self.device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
+            'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer/set","state_topic": "homie/{self.device_id}/dimmer/dimmer","payload_on" : "true","payload_off" : "false"}}',
+            # 'thermostat': f'{{"name": "{name}","command_topic": "homie/switch-{device_id}/switch/switch/set","state_topic": "homie/switch-{device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
+            'contact': f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact","payload_on" : "true","payload_off" : "false"}}',
+            'fan': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}',
+        }
+        print(f"{self.device_id} setup")
+        devicetype=self.device_id.split("-")[0]
+        if(HASS_CONFIG.__contains__(devicetype) and len(devicetype) != 0):
+            print(f'Publishing {HASS_CONFIG[devicetype]} with {HASS_PAYLOADS[devicetype]}')
+            self.publish(HASS_CONFIG[devicetype], HASS_PAYLOADS[devicetype], True, 1)
+        else:
+            logger.debug(f'No Config found for {self.device_id}')
+        #BurntTech End
     def add_subscription(self,topic,handler,qos=0): #subscription list to the required MQTT topics, used by properties to catch set topics
         self.mqtt_subscription_handlers [topic] = handler
         self.mqtt_client.subscribe (topic,qos)
@@ -240,6 +265,7 @@ class Device_Base(object):
                 self.publish_attributes()
                 self.publish_nodes()
                 self.subscribe_topics()
+                self.publish_homeassistant()
                 if self.mqtt_client.using_shared_mqtt_client is False or self.instance_number == 1: # only set last will if NOT using shared client or if using shared client and this is the first device instance
                     self.mqtt_client.set_will("/".join((self.topic, "$state")), "lost", retain=True, qos=1)
                     logger.debug ('Device setting last will')
