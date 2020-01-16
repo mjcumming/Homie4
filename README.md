@@ -12,6 +12,8 @@ Install
 pip install Homie4
 ~~~~
 
+Includes ready to use common devices such as switch, dimmer, contact, thermostat, boolean, etc. 
+
 
 EG. To create a dimmer device requires that a set_dimmer method be provided. When creating a device, all that is required is to provide the MQTT settings. All other requirements of the Homie specification are automatically handled.
 
