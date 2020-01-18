@@ -67,7 +67,7 @@ class MQTT_Base (object):
         logger.debug('MQTT unsubscribe  topic: {}'.format(topic))
 
     def set_will(self,will,topic,retain,qos): #subclass to provide
-        logger.debug ('MQTT set will {}, topic {}'.format(will,topic))
+        logger.warning ('MQTT set will {}, topic {}'.format(will,topic))
 
     def get_mac_ip_address(self):
         if self.ip_address is None:
@@ -88,7 +88,7 @@ class MQTT_Base (object):
                     logger.exception('on_message error')
 
     def _on_disconnect(self,rc):
-        logger.debug ('MQTT On Disconnect: Result Code {}'.format(rc))
+        logger.warning ('MQTT On Disconnect: Result Code {}'.format(rc))
             
     def add_device(self,device):
         self.homie_devices.append(device)

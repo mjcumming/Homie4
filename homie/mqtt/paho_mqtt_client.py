@@ -93,7 +93,7 @@ class PAHO_MQTT_Client (MQTT_Base):
             if rc in COONNECTION_RESULT_CODES:
                 rc_text = COONNECTION_RESULT_CODES [rc]
 
-            logger.warn ('MQTT Unexpected disconnection  {} {} {}'.format(client,userdata,rc_text))
+            logger.warning ('MQTT Unexpected disconnection  {} {} {}'.format(client,userdata,rc_text))
         
         MQTT_Base._on_disconnect(self,rc)
         

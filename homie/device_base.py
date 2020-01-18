@@ -3,6 +3,7 @@
 import sys
 import time
 import atexit
+import signal
 from datetime import datetime
 
 import homie
@@ -92,7 +93,10 @@ class Device_Base(object):
 
         atexit.register(self.cleanup)
 
-    def cleanup(self):
+        signal.signal(signal.SIGTERM, self.cleanup)
+        signal.signal(signal.SIGINT, self.cleanup)        
+
+    def cleanup(self,*args):
         logger.debug ('clean up')
         self.state = 'disconnected'
 
@@ -242,7 +246,7 @@ class Device_Base(object):
                 self.subscribe_topics()
                 if self.mqtt_client.using_shared_mqtt_client is False or self.instance_number == 1: # only set last will if NOT using shared client or if using shared client and this is the first device instance
                     self.mqtt_client.set_will("/".join((self.topic, "$state")), "lost", retain=True, qos=1)
-                    logger.debug ('Device setting last will')
+                    logger.warning ('Device setting last will {}'.format ("/".join((self.topic, "$state"))))
         else:
             self._mqtt_connected = False
 
