@@ -9,17 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 class Device_Contact(Device_Base):
+    def __init__(
+        self, device_id=None, name=None, homie_settings=None, mqtt_settings=None
+    ):
 
-    def __init__(self, device_id=None, name=None, homie_settings=None, mqtt_settings=None):
+        super().__init__(device_id, name, homie_settings, mqtt_settings)
 
-        super().__init__ (device_id, name, homie_settings, mqtt_settings)
-
-        self.add_node(Node_Contact(self,id='contact'))
+        self.add_node(Node_Contact(self, id="contact"))
 
         self.start()
 
-    def update_contact(self,state):
-        self.get_node('contact').update_contact(state)
-        logger.debug ('Contact Update {}'.format(state))
-
+    def update_contact(self, state):
+        self.get_node("contact").update_contact(state)
+        logger.debug("Contact Update {}".format(state))
 
