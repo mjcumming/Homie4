@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class Device_Temperature_Humidity(Device_Temperature):
     def register_status_properties(self, node):
         super(Device_Temperature_Humidity, self).register_status_properties(node)
@@ -14,7 +15,7 @@ class Device_Temperature_Humidity(Device_Temperature):
         self.humidity = Property_Humidity(node)
         node.add_property(self.humidity)
 
-    def update_humidity(self,humidity):
-        logger.info ('Updated Humidity {}'.format(humidity))
+    def update_humidity(self, humidity):
+        logger.info("Updated Humidity {}".format(humidity))
         self.humidity.value = humidity
 
