@@ -50,7 +50,7 @@ class MQTT_Base(object):
     @mqtt_connected.setter
     def mqtt_connected(self, connected):
         if connected != self._mqtt_connected:
-            logger.debug("MQTT Connected {} ".format(connected))
+            logger.debug("MQTT Connected is {} ".format(connected))
             self._mqtt_connected = connected
             for device in self.homie_devices:
                 if device.start_time is not None:
@@ -107,6 +107,7 @@ class MQTT_Base(object):
 
     def _on_disconnect(self, rc):
         logger.warning("MQTT On Disconnect: Result Code {}".format(rc))
+        self.mqtt_connected(False)
 
     def add_device(self, device):
         self.homie_devices.append(device)

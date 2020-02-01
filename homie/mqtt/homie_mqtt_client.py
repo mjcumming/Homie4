@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 from homie.mqtt.paho_mqtt_client import PAHO_MQTT_Client
+#from homie.mqtt.gmqtt_client import GMQTT_Client
+
+MQTT_Client = PAHO_MQTT_Client
+
 
 import logging
 
@@ -54,7 +58,7 @@ def connect_mqtt_client(device, mqtt_settings):
             "Using new MQTT client, number of instances {}".format(mqtt_client_count)
         )
 
-        mqtt_client = PAHO_MQTT_Client(mqtt_settings)
+        mqtt_client = MQTT_Client(mqtt_settings)
         mqtt_client.connect()
         mqtt_client_count = mqtt_client_count + 1
 
@@ -63,7 +67,7 @@ def connect_mqtt_client(device, mqtt_settings):
 
         global common_mqtt_client
         if common_mqtt_client is None:
-            common_mqtt_client = PAHO_MQTT_Client(mqtt_settings)
+            common_mqtt_client = MQTT_Client(mqtt_settings)
             common_mqtt_client.connect()
             mqtt_client_count = mqtt_client_count + 1
 

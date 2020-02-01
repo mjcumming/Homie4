@@ -6,9 +6,9 @@ from homie.device_dimmer import Device_Dimmer
 
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
+
 
 
 mqtt_settings = {

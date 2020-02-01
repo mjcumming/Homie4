@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import paho.mqtt.client as mqtt_client
-
+import asyncio
 import traceback
+import threading
+import functools
 
 from uuid import getnode as get_mac
 from homie.mqtt.mqtt_base import MQTT_Base
@@ -41,8 +43,8 @@ class PAHO_MQTT_Client(MQTT_Base):
         self.mqtt_client.on_message = self._on_message
         # self.mqtt_client.on_publish = self._on_publish
         self.mqtt_client.on_disconnect = self._on_disconnect
-        self.mqtt_client.enable_logger(mqtt_logger)
-        self.mqtt_client.enable_logger()
+        #self.mqtt_client.enable_logger(mqtt_logger)
+        #self.mqtt_client.enable_logger()
 
         if self.mqtt_settings["MQTT_USERNAME"]:
             self.mqtt_client.username_pw_set(
@@ -62,9 +64,46 @@ class PAHO_MQTT_Client(MQTT_Base):
         except Exception as e:
             logger.warning("MQTT Unable to connect to Broker {}".format(e))
 
+
+        MQTT_Base.connect(self)
+
+        self.mqtt_client.on_connect = self._on_connect
+        self.mqtt_client.on_message = self._on_message
+        self.mqtt_client.on_disconnect = self._on_disconnect
+
+
+        if self.mqtt_settings["MQTT_USERNAME"]:
+            self.mqtt_client.set_auth_credentials(
+                self.mqtt_settings["MQTT_USERNAME"],
+                self.mqtt_settings["MQTT_PASSWORD"],
+            )
+
+        def start():
+            try:
+                logger.warning ('Publisher loop')
+                asyncio.set_event_loop(self.event_loop)
+                logger.warning ('Looping forever')
+                self.event_loop.run_forever()
+                logger.warning ('Event loop stopped')
+
+            except Exception as e:
+                logger.error ('Error in event loop {}'.format(e))
+
+        self.event_loop = asyncio.new_event_loop()
+
+        logger.warning("Starting MQTT publish thread")
+        self._ws_thread = threading.Thread(target=start, args=())
+
+        self._ws_thread.daemon = True
+        self._ws_thread.start()
+
     def publish(self, topic, payload, retain, qos):
         MQTT_Base.publish(self, topic, payload, retain, qos)
-        self.mqtt_client.publish(topic, payload, retain=retain, qos=qos)
+
+        wrapped = functools.partial(
+            self.mqtt_client.publish,topic, payload, retain=retain, qos=qos
+        )
+        self.event_loop.call_soon(wrapped)
 
     def subscribe(self, topic, qos):  # subclass to provide
         MQTT_Base.subscribe(self, topic, qos)

@@ -1,5 +1,6 @@
 import time
 from threading import Event, Thread
+import traceback
 
 import logging
 
@@ -29,7 +30,7 @@ class Repeating_Timer(object):
                 try:
                     callback()
                 except Exception as e:
-                    logger.warning("Error in timer callback: {}".format(e))
+                    logger.warning("Error in timer callback: {}  {}".format(e,traceback.format_exc()))
 
     @property
     def _time(self):
