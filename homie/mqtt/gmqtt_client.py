@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+# not fully working
+
 import asyncio
 import os
 import signal
@@ -77,7 +80,7 @@ class GMQTT_Client(MQTT_Base):
             wrapped = functools.partial(
                 self.mqtt_client.publish,topic, payload, retain=retain, qos=qos
             )
-            self.event_loop.call_soon(wrapped)
+            self.event_loop.call_soon_threadsafe(wrapped)
         else:
             logger.warning(
                 "Device MQTT publish NOT CONNECTED: {}, retain {}, qos {}, payload: {}".format(

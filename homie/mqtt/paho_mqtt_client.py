@@ -100,10 +100,13 @@ class PAHO_MQTT_Client(MQTT_Base):
     def publish(self, topic, payload, retain, qos):
         MQTT_Base.publish(self, topic, payload, retain, qos)
 
+        def p():
+            self.mqtt_client.publish(topic, payload, retain=retain, qos=qos)
+
         wrapped = functools.partial(
-            self.mqtt_client.publish,topic, payload, retain=retain, qos=qos
+            p
         )
-        self.event_loop.call_soon(wrapped)
+        self.event_loop.call_soon_threadsafe(wrapped)
 
     def subscribe(self, topic, qos):  # subclass to provide
         MQTT_Base.subscribe(self, topic, qos)
