@@ -16,22 +16,22 @@ logger.setLevel("INFO")
 
 # example
 THERMOSTAT_SETTINGS = {
-    'current_temperature': 70,
-    'current_humidity': 30,
-    'cool_setpoint': 70,
-    'max_cool_setpoint': 90,
-    'min_cool_setpoint': 60,
-    'heat_setpoint': 70,
-    'max_heat_setpoint': 90,
-    'min_heat_setpoint': 60,
-    'fan_mode': 'On',
-    'fan_modes': ['On', 'Auto'],
-    'hold_mode': 'Schedule',
-    'hold_modes': ['Schedule', 'Temporary', 'Permanent'],
-    'system_mode': 'Off',
-    'system_modes': ['Off', 'Heat', 'Cool', 'Auto'],
-    'system_status': 'Idle',
-    'units': 'F',
+    "current_temperature": 70,
+    "current_humidity": 30,
+    "cool_setpoint": 70,
+    "max_cool_setpoint": 90,
+    "min_cool_setpoint": 60,
+    "heat_setpoint": 70,
+    "max_heat_setpoint": 90,
+    "min_heat_setpoint": 60,
+    "fan_mode": "On",
+    "fan_modes": ["On", "Auto"],
+    "hold_mode": "Schedule",
+    "hold_modes": ["Schedule", "Temporary", "Permanent"],
+    "system_mode": "Off",
+    "system_modes": ["Off", "Heat", "Cool", "Auto"],
+    "system_status": "Idle",
+    "units": "F",
 }
 
 
@@ -157,7 +157,7 @@ class Device_Thermostat(Device_Base):
 
     def update_hold_mode(self, value):
         self.hold_mode.value = value
-        
+
     def update_current_temperature(self, value):
         self.current_temperture.value = value
 
@@ -165,16 +165,16 @@ class Device_Thermostat(Device_Base):
         self.current_humidity.value = value
 
     def set_heat_setpoint(self, value):
-        logger.debug('Heat Set {}'.format(value))
+        logger.debug("Heat Set {}".format(value))
 
     def set_cool_setpoint(self, value):
-        logger.debug('Cool Set {}'.format(value))
+        logger.debug("Cool Set {}".format(value))
 
     def set_system_mode(self, value):
-        logger.debug('Mode Set {}'.format(value))
+        logger.debug("Mode Set {}".format(value))
 
     def set_fan_mode(self, value):
-        logger.debug('Fan Set {}'.format(value))
+        logger.debug("Fan Set {}".format(value))
 
     def set_hold_mode(self, value):
-        logger.debug('Hold Set {}'.format(value))
+        logger.debug("Hold Set {}".format(value))
