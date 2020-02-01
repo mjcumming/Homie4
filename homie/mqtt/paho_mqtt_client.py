@@ -10,7 +10,6 @@ from homie.mqtt.mqtt_base import MQTT_Base
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 mqtt_logger = logging.getLogger("MQTT")
 mqtt_logger.setLevel("INFO")

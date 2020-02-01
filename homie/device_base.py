@@ -15,7 +15,7 @@ from homie.support.repeating_timer import Repeating_Timer
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
+
 
 instance_count = 0  # used to track the number of device instances to allow for changing the default device id
 
@@ -333,7 +333,8 @@ class Device_Base(object):
                     topic, payload, retain, qos
                 )
             )  # for logging only, topic and handler for subsriptions above
-            if retain is False:
+
+            if retain is False: # OH2.5 MQTT sends set messages with retain true - need to check to avoid this problem
                 self.mqtt_subscription_handlers[topic](topic, payload)
             else:
                 logger.warn(

@@ -154,6 +154,7 @@ class Device_Thermostat(Device_Base):
 
     def update_hold_mode(self, value):
         self.hold_mode.value = value
+        
     def update_current_temperature(self, value):
         self.current_temperture.value = value
 

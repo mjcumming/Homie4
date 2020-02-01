@@ -15,7 +15,7 @@ network_info = Network_Information()
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
+
 
 MQTT_SETTINGS = {
     "MQTT_BROKER": None,
