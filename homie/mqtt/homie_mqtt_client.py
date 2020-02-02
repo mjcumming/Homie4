@@ -21,6 +21,7 @@ MQTT_SETTINGS = {
 }
 
 mqtt_client_count = 0
+mqtt_clients = []
 
 
 def _mqtt_validate_settings(settings):
@@ -54,22 +55,24 @@ def connect_mqtt_client(device, mqtt_settings):
 
     if mqtt_settings["MQTT_SHARE_CLIENT"] is not True:
 
-        logger.debug(
+        logger.info(
             "Using new MQTT client, number of instances {}".format(mqtt_client_count)
         )
 
         mqtt_client = MQTT_Client(mqtt_settings)
         mqtt_client.connect()
         mqtt_client_count = mqtt_client_count + 1
+        mqtt_clients.append(mqtt_client)
 
     else:
-        logger.debug("Using common MQTT client")
+        logger.info("Using common MQTT client")
 
         global common_mqtt_client
         if common_mqtt_client is None:
             common_mqtt_client = MQTT_Client(mqtt_settings)
             common_mqtt_client.connect()
             mqtt_client_count = mqtt_client_count + 1
+            mqtt_clients.append(mqtt_client)
 
         mqtt_client = common_mqtt_client
 
@@ -77,3 +80,7 @@ def connect_mqtt_client(device, mqtt_settings):
 
     return mqtt_client
 
+def close_mqtt_clients():
+    logger.info ('Closing MQTT clients')
+    for client in mqtt_clients:
+        client.close()

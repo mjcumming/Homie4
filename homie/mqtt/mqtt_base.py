@@ -115,3 +115,5 @@ class MQTT_Base(object):
     def remove_device(self, device):  # not tested
         del self.homie_devices[device]
 
+    def close(self):
+        logger.info("MQTT Closing")

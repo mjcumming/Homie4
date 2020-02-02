@@ -10,6 +10,7 @@ import homie
 
 from homie.support.helpers import validate_id
 from homie.mqtt.homie_mqtt_client import connect_mqtt_client
+from homie.mqtt.homie_mqtt_client import close_mqtt_clients
 from homie.support.repeating_timer import Repeating_Timer
 
 import logging
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 instance_count = 0  # used to track the number of device instances to allow for changing the default device id
+devices = []
 
 repeating_timer = None  # use common timer between all devices for updating state
 
@@ -95,13 +97,16 @@ class Device_Base(object):
 
         self.mqtt_subscription_handlers = {}
 
-        atexit.register(self.cleanup)
+        global devices 
+        devices.append(self)
 
-        signal.signal(signal.SIGTERM, self.cleanup)
-        signal.signal(signal.SIGINT, self.cleanup)
+        #atexit.register(self.close)
 
-    def cleanup(self, *args):
-        logger.debug("clean up")
+        #signal.signal(signal.SIGTERM, self.close)
+        #signal.signal(signal.SIGINT, self.close)
+
+    def close(self, *args):
+        logger.info("Device Close {}".format(self.name))
         self.state = "disconnected"
 
     def generate_device_id(self):
@@ -110,7 +115,7 @@ class Device_Base(object):
         return "device{:04d}".format(self.instance_number)
 
     def start(self):  # called after the device has been built with nodes and properties
-        logger.debug("Device startup")
+        logger.info("Device Start {}".format(self.name))
         self.start_time = time.time()
 
         if "stats" in self.extensions:
@@ -302,7 +307,7 @@ class Device_Base(object):
         return settings
 
     def mqtt_on_connection(self, connected):
-        logger.debug("Device MQTT Connected state is {}".format(connected))
+        logger.info("Device MQTT Connected state is {}".format(connected))
         # print("Device MQTT Connected state is {}".format(connected))
 
         if connected:
@@ -344,4 +349,19 @@ class Device_Base(object):
                         topic, payload, retain, qos
                     )
                 )  # for logging only, topic and handler for subsriptions above
+
+
+def close_devices(*arg):
+    logger.info ('Closing Devices')
+    global devices 
+    for device in devices:
+        device.close()
+    logger.info ('Closed Devices')
+
+    close_mqtt_clients()
+
+#atexit.register(close_devices)
+
+#signal.signal(signal.SIGTERM, close_devices)
+#signal.signal(signal.SIGINT, close_devices)
 

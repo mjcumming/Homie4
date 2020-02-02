@@ -80,9 +80,9 @@ class PAHO_MQTT_Client(MQTT_Base):
 
         def start():
             try:
-                logger.warning ('Publisher loop')
+                logger.info ('Publisher loop')
                 asyncio.set_event_loop(self.event_loop)
-                logger.warning ('Looping forever')
+                logger.info ('Looping forever')
                 self.event_loop.run_forever()
                 logger.warning ('Event loop stopped')
 
@@ -144,3 +144,6 @@ class PAHO_MQTT_Client(MQTT_Base):
             )
         MQTT_Base._on_disconnect(self, rc)
 
+    def close(self):
+        MQTT_Base.close(self)
+        self.event_loop.stop()

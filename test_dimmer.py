@@ -43,3 +43,4 @@ try:
 
 except (KeyboardInterrupt, SystemExit):
     print("Quitting.")
+    dimmer.close()
