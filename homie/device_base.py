@@ -179,9 +179,10 @@ class Device_Base(object):
 
         HASS_PAYLOADS = {
             'switch': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/switch/switch/set","state_topic": "homie/{self.device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
-            'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer/set","state_topic": "homie/{self.device_id}/dimmer/dimmer","payload_on" : "true","payload_off" : "false"}}',
+            'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","on_command_type": "brightness","brightness_scale": "100","payload_on" : 100,"payload_off" : 0}}',
+            #'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer","state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_scale": "100","on_command_type": "brightness","command_on_template": ".5"}}',
             # 'thermostat': f'{{"name": "{name}","command_topic": "homie/switch-{device_id}/switch/switch/set","state_topic": "homie/switch-{device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
-            'contact': f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact","payload_on" : "true","payload_off" : "false"}}',
+            'contact': f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact"}}',
             'fan': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}',
         }
         print(f"{self.device_id} setup")

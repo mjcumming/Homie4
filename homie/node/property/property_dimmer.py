@@ -10,13 +10,13 @@ class Property_Dimmer(Property_Float):
 
     def get_value_from_payload(self,payload):
         try:
-            return round(float(payload)*100,0)
+            return round(float(payload),0)
         except:
             return None
 
     def get_payload_from_value(self,value): 
         try:
-            return round(value/100,2)
+            return round(value,2)
         except:
             return None
 
