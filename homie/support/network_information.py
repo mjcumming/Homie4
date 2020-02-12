@@ -6,7 +6,7 @@ import socket
 
 logger = logging.getLogger(__name__)
 
-''' or use psutils
+""" or use psutils
 
 import psutil
 
@@ -19,7 +19,7 @@ for i in nics:
     for j in nics[i]:
         if j.family == 17:  # AF_LINK
             mac_addresses.append(j.address)
-'''
+"""
 
 
 class Network_Information(object):
@@ -35,7 +35,7 @@ class Network_Information(object):
             try:
                 ifInfo = netifaces.ifaddresses(interface)[netifaces.AF_INET]
                 for addrInfo in ifInfo:
-                    addr = addrInfo.get('addr')
+                    addr = addrInfo.get("addr")
                     if addr:
                         map[addr] = interface
             except Exception:
@@ -50,7 +50,9 @@ class Network_Information(object):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect((targetHost, targetPort))
         except Exception as e:
-            logger.exception("Cannot create socket to target " + targetHost + ":" + targetPort)
+            logger.exception(
+                "Cannot create socket to target " + targetHost + ":" + targetPort
+            )
         else:
             ip = s.getsockname()[0]
             s.close()
@@ -67,12 +69,11 @@ class Network_Information(object):
         try:
             link = netifaces.ifaddresses(if_name)[netifaces.AF_LINK]
         except (KeyError, TypeError):
-            logger.warning('Could not determine MAC for: %s', if_name)
+            logger.warning("Could not determine MAC for: %s", if_name)
         else:
             logger.debug("Found link: %s", link)
             if len(link) > 1:
-                logger.warning(
-                    'Conflict: Multiple interfaces found for IP: %s!', ip)
-            mac_addr = link[0].get('addr')
+                logger.warning("Conflict: Multiple interfaces found for IP: %s!", ip)
+            mac_addr = link[0].get("addr")
         return mac_addr
 

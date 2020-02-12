@@ -1,12 +1,13 @@
 import time
 from threading import Event, Thread
+import traceback
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class Repeating_Timer (object):
+class Repeating_Timer(object):
     DEFAULT_INTERVAL_REDUCTION = 0.9
 
     """Repeat `function` every `interval` seconds."""
@@ -29,17 +30,16 @@ class Repeating_Timer (object):
                 try:
                     callback()
                 except Exception as e:
-                    logger.warning('Error in timer callback: {}'.format(e))
+                    logger.error("Error in timer callback: {}  {}".format(e,traceback.format_exc()))
 
     @property
     def _time(self):
         return self.interval - ((time.time() - self.start) % self.interval)
 
-    def add_callback(self,callback):
+    def add_callback(self, callback):
         self.callbacks.append(callback)
 
     def stop(self):
         self.event.set()
         self.thread.join()
-
 

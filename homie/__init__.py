@@ -1,2 +1,2 @@
-name="homie"
-__version__ = "0.1.7"
+name = "homie"
+__version__ = "0.2.7"
