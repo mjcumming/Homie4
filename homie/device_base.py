@@ -193,33 +193,9 @@ class Device_Base(object):
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
         self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
-    def publish_homeassistant(self):
-        #BurntTech Start
-
-        HASS_CONFIG = {
-            'switch': f'homeassistant/switch/{self.device_id}/config',
-            'dimmer': f'homeassistant/light/{self.device_id}/config',
-            # 'thermostat': f'/homeassistant/climate/thermostat-{device_id}/config',
-            'contact': f'homeassistant/sensor/{self.device_id}/config',
-            'fan': f'homeassistant/fan/{self.device_id}/config'
-        }
-
-        HASS_PAYLOADS = {
-            'switch': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/switch/switch/set","state_topic": "homie/{self.device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
-            'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","state_topic": "homie/{self.device_id}/dimmer/power","on_command_type": "brightness","brightness_scale": "100"}}',
-            #'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer","state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_scale": "100","on_command_type": "brightness","command_on_template": ".5"}}',
-            # 'thermostat': f'{{"name": "{name}","command_topic": "homie/switch-{device_id}/switch/switch/set","state_topic": "homie/switch-{device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
-            'contact': f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact"}}',
-            'fan': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}',
-        }
-        print(f"{self.device_id} setup")
-        devicetype=self.device_id.split("-")[0]
-        if(HASS_CONFIG.__contains__(devicetype) and len(devicetype) != 0):
-            print(f'Publishing {HASS_CONFIG[devicetype]} with {HASS_PAYLOADS[devicetype]}')
-            self.publish(HASS_CONFIG[devicetype], HASS_PAYLOADS[devicetype], True, 1)
-        else:
-            logger.debug(f'No Config found for {self.device_id}')
-        #BurntTech End
+    def publish_homeassistant(self,hass_config,hass_payload):
+        self.publish(hass_config,hass_payload, True, 1)
+        
     def add_subscription(self,topic,handler,qos=0): #subscription list to the required MQTT topics, used by properties to catch set topics
         self.mqtt_subscription_handlers [topic] = handler
         self.mqtt_client.subscribe (topic,qos)
