@@ -175,75 +175,60 @@ class Device_Base(object):
         if "firmware" in self.extensions:
             self.publish_firmware(retain, qos)
 
-    def publish_firmware(self, retain=True, qos=1):
-        mac, ip = self.mqtt_client.get_mac_ip_address()
+    def publish_firmware(self, retain = True, qos = 1):
+        mac,ip = self.mqtt_client.get_mac_ip_address()
 
-        self.publish("/".join((self.topic, "$localip")), ip, retain, qos)
-        self.publish("/".join((self.topic, "$mac")), mac, retain, qos)
-        self.publish(
-            "/".join((self.topic, "$fw/name")),
-            self.homie_settings["fw_name"],
-            retain,
-            qos,
-        )
-        self.publish(
-            "/".join((self.topic, "$fw/version")),
-            self.homie_settings["fw_version"],
-            retain,
-            qos,
-        )
-        self.publish(
-            "/".join((self.topic, "$implementation")),
-            self.homie_settings["implementation"],
-            retain,
-            qos,
-        )
+        self.publish("/".join((self.topic, "$localip")),ip, retain, qos)
+        self.publish("/".join((self.topic, "$mac")),mac, retain, qos)
+        self.publish("/".join((self.topic, "$fw/name")),self.homie_settings ['fw_name'], retain, qos)
+        self.publish("/".join((self.topic, "$fw/version")),self.homie_settings ['fw_version'], retain, qos)
+        self.publish("/".join((self.topic, "$implementation")),self.homie_settings ['implementation'], retain, qos)
 
-    def publish_statastics(self, retain=True, qos=1):
-        self.publish(
-            "/".join((self.topic, "$stats/interval")),
-            self.homie_settings["update_interval"],
-            retain,
-            qos,
-        )
-        self.publish(
-            "/".join((self.topic, "$stats/uptime")),
-            time.time() - self.start_time,
-            retain,
-            qos,
-        )
-        self.publish(
-            "/".join((self.topic, "$stats/lastupdate")),
-            datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            retain,
-            qos,
-        )
+    def publish_statastics(self, retain = True, qos = 1):
+        self.publish("/".join((self.topic, "$stats/interval")),self.homie_settings ['update_interval'], retain, qos)
+        self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
+        self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
     def publish_uptime(self, retain=True, qos=1):
-        self.publish(
-            "/".join((self.topic, "$stats/uptime")),
-            time.time() - self.start_time,
-            retain,
-            qos,
-        )
-        self.publish(
-            "/".join((self.topic, "$stats/lastupdate")),
-            datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            retain,
-            qos,
-        )
+        self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
+        self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
-    def add_subscription(
-        self, topic, handler, qos=0
-    ):  # subscription list to the required MQTT topics, used by properties to catch set topics
-        self.mqtt_subscription_handlers[topic] = handler
-        self.mqtt_client.subscribe(topic, qos)
-        logger.debug("MQTT subscribed to {}".format(topic))
+    def publish_homeassistant(self):
+        #BurntTech Start
 
-    def remove_subscription(self, topic):
-        self.mqtt_client.unsubscribe(topic)
-        del self.mqtt_subscription_handlers[topic]
-        logger.debug("MQTT unsubscribed to {}".format(topic))
+        HASS_CONFIG = {
+            'switch': f'homeassistant/switch/{self.device_id}/config',
+            'dimmer': f'homeassistant/light/{self.device_id}/config',
+            # 'thermostat': f'/homeassistant/climate/thermostat-{device_id}/config',
+            'contact': f'homeassistant/sensor/{self.device_id}/config',
+            'fan': f'homeassistant/fan/{self.device_id}/config'
+        }
+
+        HASS_PAYLOADS = {
+            'switch': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/switch/switch/set","state_topic": "homie/{self.device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
+            'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer/set","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","state_topic": "homie/{self.device_id}/dimmer/power","on_command_type": "brightness","brightness_scale": "100"}}',
+            #'dimmer': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/dimmer/dimmer","state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_command_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_state_topic": "homie/{self.device_id}/dimmer/dimmer","brightness_scale": "100","on_command_type": "brightness","command_on_template": ".5"}}',
+            # 'thermostat': f'{{"name": "{name}","command_topic": "homie/switch-{device_id}/switch/switch/set","state_topic": "homie/switch-{device_id}/switch/switch","state_on" : "true","state_off" : "false","payload_on" : "true","payload_off" : "false"}}',
+            'contact': f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact"}}',
+            'fan': f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}',
+        }
+        print(f"{self.device_id} setup")
+        devicetype=self.device_id.split("-")[0]
+        if(HASS_CONFIG.__contains__(devicetype) and len(devicetype) != 0):
+            print(f'Publishing {HASS_CONFIG[devicetype]} with {HASS_PAYLOADS[devicetype]}')
+            self.publish(HASS_CONFIG[devicetype], HASS_PAYLOADS[devicetype], True, 1)
+        else:
+            logger.debug(f'No Config found for {self.device_id}')
+        #BurntTech End
+    def add_subscription(self,topic,handler,qos=0): #subscription list to the required MQTT topics, used by properties to catch set topics
+        self.mqtt_subscription_handlers [topic] = handler
+        self.mqtt_client.subscribe (topic,qos)
+        logger.debug ('MQTT subscribed to {}'.format(topic))
+
+    def remove_subscription(self,topic):
+        self.mqtt_client.unsubscribe (topic)
+        del self.mqtt_subscription_handlers [topic]
+        logger.debug ('MQTT unsubscribed to {}'.format(topic))
 
     def subscribe_topics(self):
         logger.debug("Device subscribing to topics")
@@ -316,6 +301,7 @@ class Device_Base(object):
                 self.publish_attributes()
                 self.publish_nodes()
                 self.subscribe_topics()
+                self.publish_homeassistant()
                 if (
                     self.mqtt_client.using_shared_mqtt_client is False
                     or self.instance_number == 1
