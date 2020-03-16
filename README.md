@@ -17,7 +17,7 @@ Includes ready to use common devices such as switch, dimmer, contact, thermostat
 
 EG. To create a dimmer device requires that a set_dimmer method be provided. When creating a device, all that is required is to provide the MQTT settings. All other requirements of the Homie specification are automatically handled.
 
-~~~~
+```python
 import time
 
 from homie.device_dimmer import Device_Dimmer
@@ -49,6 +49,6 @@ except (KeyboardInterrupt, SystemExit):
     print("Quitting.")      
 
 
-~~~~
+````
 
 If creating multiple homie devices, you can specify Homie to only use one MQTT connection. This can be an issue on devices with limited resources. For MQTT_SETTINGS add MQTT_SHARE_CLIENT: True.
