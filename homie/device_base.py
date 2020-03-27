@@ -170,7 +170,7 @@ class Device_Base(object):
             self.publish("/".join((self.topic, "$extensions")), extensions, retain, qos)
 
         if "stats" in self.extensions:
-            self.publish_statastics(retain, qos)
+            self.publish_statistics(retain, qos)
 
         if "firmware" in self.extensions:
             self.publish_firmware(retain, qos)
@@ -184,7 +184,7 @@ class Device_Base(object):
         self.publish("/".join((self.topic, "$fw/version")),self.homie_settings ['fw_version'], retain, qos)
         self.publish("/".join((self.topic, "$implementation")),self.homie_settings ['implementation'], retain, qos)
 
-    def publish_statastics(self, retain = True, qos = 1):
+    def publish_statistics(self, retain = True, qos = 1):
         self.publish("/".join((self.topic, "$stats/interval")),self.homie_settings ['update_interval'], retain, qos)
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
         self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
