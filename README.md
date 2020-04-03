@@ -58,7 +58,7 @@ except (KeyboardInterrupt, SystemExit):
 
 To create a dimmer device requires that a set_dimmer method be provided. When creating a device, all that is required is to provide the MQTT settings. All other requirements of the Homie specification are automatically handled.
 
-~~~~
+```python
 import time
 
 from homie.device_dimmer import Device_Dimmer
@@ -90,7 +90,7 @@ except (KeyboardInterrupt, SystemExit):
     print("Quitting.")      
 
 
-~~~~
+````
 
 
 
