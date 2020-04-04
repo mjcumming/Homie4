@@ -24,7 +24,7 @@ pip3 install Homie4
 
 Creates a temperature device using a AM2302 sensor. 
 
-~~~~
+~~~~python
 import Adafruit_DHT
 import time
 
@@ -34,7 +34,6 @@ mqtt_settings = {
     'MQTT_BROKER' : 'OpenHAB',
     'MQTT_PORT' : 1883,
 }
-
 
 try:
 
