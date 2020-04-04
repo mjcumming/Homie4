@@ -64,13 +64,11 @@ class PAHO_MQTT_Client(MQTT_Base):
         except Exception as e:
             logger.warning("MQTT Unable to connect to Broker {}".format(e))
 
-
         MQTT_Base.connect(self)
 
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.on_message = self._on_message
         self.mqtt_client.on_disconnect = self._on_disconnect
-
 
         if self.mqtt_settings["MQTT_USERNAME"]:
             self.mqtt_client.set_auth_credentials(
@@ -91,7 +89,7 @@ class PAHO_MQTT_Client(MQTT_Base):
 
         self.event_loop = asyncio.new_event_loop()
 
-        logger.warning("Starting MQTT publish thread")
+        logger.info("Starting MQTT publish thread")
         self._ws_thread = threading.Thread(target=start, args=())
 
         self._ws_thread.daemon = True
