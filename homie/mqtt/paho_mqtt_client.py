@@ -71,16 +71,15 @@ class PAHO_MQTT_Client(MQTT_Base):
         self.mqtt_client.on_disconnect = self._on_disconnect
 
         if self.mqtt_settings["MQTT_USERNAME"]:
-            self.mqtt_client.set_auth_credentials(
+            self.mqtt_client.username_pw_set(
                 self.mqtt_settings["MQTT_USERNAME"],
-                self.mqtt_settings["MQTT_PASSWORD"],
+                password=self.mqtt_settings["MQTT_PASSWORD"],
             )
 
         def start():
             try:
-                logger.info ('Publisher loop')
                 asyncio.set_event_loop(self.event_loop)
-                logger.info ('Looping forever')
+                logger.info ('Starting Asyincio looping forever')
                 self.event_loop.run_forever()
                 logger.warning ('Event loop stopped')
 
