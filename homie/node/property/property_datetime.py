@@ -29,7 +29,7 @@ class Property_DateTime(Property_Base):
             retained,
             qos,
             unit,
-            "datetime",
+            "string",
             data_format,
             value,
             set_value,
@@ -40,7 +40,7 @@ class Property_DateTime(Property_Base):
     def validate_value(self, value):
         try:
             date_time_obj = datetime.datetime.strptime(
-                date_time_str, "%Y-%m-%d %H:%M:%S.%f"
+                value, "%Y-%m-%d %H:%M:%S.%f"
             )
             return True
         except:
