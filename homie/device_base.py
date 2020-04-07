@@ -277,7 +277,7 @@ class Device_Base(object):
                 self.publish_attributes()
                 self.publish_nodes()
                 self.subscribe_topics()
-                self.publish_homeassistant()
+                #self.publish_homeassistant()
                 if (
                     self.mqtt_client.using_shared_mqtt_client is False
                     or self.instance_number == 1
