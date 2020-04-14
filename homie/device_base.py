@@ -278,18 +278,6 @@ class Device_Base(object):
                 self.publish_nodes()
                 self.subscribe_topics()
                 #self.publish_homeassistant()
-                if (
-                    self.mqtt_client.using_shared_mqtt_client is False
-                    or self.instance_number == 1
-                ):  # only set last will if NOT using shared client or if using shared client and this is the first device instance
-                    self.mqtt_client.set_will(
-                        "/".join((self.topic, "$state")), "lost", retain=True, qos=1
-                    )
-                    logger.warning(
-                        "Device setting last will {}".format(
-                            "/".join((self.topic, "$state"))
-                        )
-                    )
         else:
             self._mqtt_connected = False
 

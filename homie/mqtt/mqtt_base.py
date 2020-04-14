@@ -29,8 +29,10 @@ MQTT_SETTINGS = {
 
 
 class MQTT_Base(object):
-    def __init__(self, mqtt_settings):
+    def __init__(self, mqtt_settings, last_will):
         logger.debug("MQTT client Settings {}".format(mqtt_settings))
+
+        self.last_will = last_will
 
         self.using_shared_mqtt_client = mqtt_settings["MQTT_SHARE_CLIENT"]
 

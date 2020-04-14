@@ -5,7 +5,6 @@ from homie.mqtt.paho_mqtt_client import PAHO_MQTT_Client
 
 MQTT_Client = PAHO_MQTT_Client
 
-
 import logging
 
 logger = logging.getLogger(__name__)
@@ -53,13 +52,15 @@ def connect_mqtt_client(device, mqtt_settings):
 
     mqtt_client = None
 
+    last_will_topic = "/".join((device.topic, "$state"))
+
     if mqtt_settings["MQTT_SHARE_CLIENT"] is not True:
 
         logger.info(
             "Using new MQTT client, number of instances {}".format(mqtt_client_count)
         )
 
-        mqtt_client = MQTT_Client(mqtt_settings)
+        mqtt_client = MQTT_Client(mqtt_settings, last_will_topic)
         mqtt_client.connect()
         mqtt_client_count = mqtt_client_count + 1
         mqtt_clients.append(mqtt_client)
@@ -69,7 +70,7 @@ def connect_mqtt_client(device, mqtt_settings):
 
         global common_mqtt_client
         if common_mqtt_client is None:
-            common_mqtt_client = MQTT_Client(mqtt_settings)
+            common_mqtt_client = MQTT_Client(mqtt_settings,last_will_topic)
             common_mqtt_client.connect()
             mqtt_client_count = mqtt_client_count + 1
             mqtt_clients.append(mqtt_client)

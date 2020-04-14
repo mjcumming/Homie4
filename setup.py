@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Homie4",
-    version="0.3.0",
+    version="0.3.1",
     description="Homie 4.0.0 Implementation",
     author="Michael Cumming",
     author_email="mike@4831.com",

@@ -28,8 +28,8 @@ COONNECTION_RESULT_CODES = {
 
 
 class PAHO_MQTT_Client(MQTT_Base):
-    def __init__(self, mqtt_settings):
-        MQTT_Base.__init__(self, mqtt_settings)
+    def __init__(self, mqtt_settings, last_will):
+        MQTT_Base.__init__(self, mqtt_settings, last_will)
 
         self.mqtt_client = None
 
@@ -45,6 +45,8 @@ class PAHO_MQTT_Client(MQTT_Base):
         self.mqtt_client.on_disconnect = self._on_disconnect
         #self.mqtt_client.enable_logger(mqtt_logger)
         #self.mqtt_client.enable_logger()
+
+        self.set_will(self.last_will,"lost",True,1)
 
         if self.mqtt_settings["MQTT_USERNAME"]:
             self.mqtt_client.username_pw_set(
@@ -63,8 +65,6 @@ class PAHO_MQTT_Client(MQTT_Base):
 
         except Exception as e:
             logger.warning("MQTT Unable to connect to Broker {}".format(e))
-
-        MQTT_Base.connect(self)
 
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.on_message = self._on_message
