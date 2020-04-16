@@ -37,8 +37,8 @@ class Device_Speed(Device_Base):
     def set_speed(self, speed):
         logger.debug("Speed Set {}".format(speed))
 
-    def publish_homeassistant(self):
-        hass_config = f'homeassistant/fan/{self.device_id}/config'
-        hass_payload = f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}'
+#    def publish_homeassistant(self):
+#        hass_config = f'homeassistant/fan/{self.device_id}/config'
+#        hass_payload = f'{{"name": "{self.name}","command_topic": "homie/{self.device_id}/speed/speed/set","state_topic": "homie/{self.device_id}/speed/speed"}}'
    
-        super().publish_homeassistant(hass_config,hass_payload)
+#        super().publish_homeassistant(hass_config,hass_payload)

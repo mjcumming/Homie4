@@ -23,7 +23,7 @@ class Device_Contact(Device_Base):
         self.get_node("contact").update_contact(state)
         logger.debug("Contact Update {}".format(state))
 
-    def publish_homeassistant(self):
-        hass_config = f'homeassistant/sensor/{self.device_id}/config'
-        hass_payload = f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact"}}'
-        super().publish_homeassistant(hass_config,hass_payload)
+#    def publish_homeassistant(self):
+#        hass_config = f'homeassistant/sensor/{self.device_id}/config'
+#        hass_payload = f'{{"name": "{self.name}","state_topic": "homie/{self.device_id}/contact/contact"}}'
+#        super().publish_homeassistant(hass_config,hass_payload)

@@ -193,8 +193,8 @@ class Device_Base(object):
         self.publish("/".join((self.topic, "$stats/uptime")),time.time()-self.start_time, retain, qos)
         self.publish("/".join((self.topic, "$stats/lastupdate")),datetime.now().strftime("%d/%m/%Y %H:%M:%S"), retain, qos)
 
-    def publish_homeassistant(self,hass_config,hass_payload):
-        self.publish(hass_config,hass_payload, True, 1)
+#    def publish_homeassistant(self,hass_config,hass_payload):
+#        self.publish(hass_config,hass_payload, True, 1)
         
     def add_subscription(self,topic,handler,qos=0): #subscription list to the required MQTT topics, used by properties to catch set topics
         self.mqtt_subscription_handlers [topic] = handler
