@@ -40,7 +40,7 @@ class Property_DateTime(Property_Base):
     def validate_value(self, value):
         try:
             date_time_obj = datetime.datetime.strptime(
-                value, "%Y-%m-%d %H:%M:%S.%f"
+                value, "%Y-%m-%dT%H:%M:%S.%f"
             )
             return True
         except:
@@ -48,7 +48,7 @@ class Property_DateTime(Property_Base):
 
     def get_value_from_payload(self, payload):
         try:
-            return datetime.datetime.strptime(payload, "%Y-%m-%d %H:%M:%S.%f")
+            return datetime.datetime.strptime(payload, "%Y-%m-%dT%H:%M:%S.%f")
         except:
             return None
 
