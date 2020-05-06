@@ -37,7 +37,8 @@ class PAHO_MQTT_Client(MQTT_Base):
         MQTT_Base.connect(self)
 
         self.mqtt_client = mqtt_client.Client(
-            client_id=self.mqtt_settings["MQTT_CLIENT_ID"]
+            client_id=self.mqtt_settings["MQTT_CLIENT_ID"],
+            #clean_session=0
         )
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.on_message = self._on_message
@@ -118,7 +119,7 @@ class PAHO_MQTT_Client(MQTT_Base):
         self.mqtt_client.will_set(will, topic, retain, qos)
 
     def _on_connect(self, client, userdata, flags, rc):
-        logger.debug("MQTT On Connect: {}".format(rc))
+        logger.debug("MQTT On Connect: Result code {}, Flags {}".format(rc,flags))
         self.mqtt_connected = rc == 0
 
     def _on_message(self, client, userdata, msg):

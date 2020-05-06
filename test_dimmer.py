@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 mqtt_settings = {
     "MQTT_BROKER": "OpenHAB",
     "MQTT_PORT": 1883,
+    "MQTT_CLIENT_ID": "TESTDIMMER"
 }
 
 
