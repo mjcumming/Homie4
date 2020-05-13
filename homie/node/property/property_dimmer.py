@@ -3,7 +3,7 @@ from .property_float import Property_Float
 tags = ["Lighting", "Dimmable"]
 
 
-class Property_Dimmer(Property_Float):
+class Property_Dimmer(Property_Integer):
     def __init__(
         self,
         node,
@@ -37,14 +37,3 @@ class Property_Dimmer(Property_Float):
             meta,
         )
 
-    def get_value_from_payload(self, payload):
-        try:
-            return int(round(float(payload) * 100,0))
-        except:
-            return None
-
-    def get_payload_from_value(self, value):
-        try:
-            return round(value/100,3)
-        except:
-            return None
