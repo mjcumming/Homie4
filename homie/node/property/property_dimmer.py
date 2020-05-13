@@ -1,4 +1,4 @@
-from .property_float import Property_Float
+from .property_integer import Property_Integer
 
 tags = ["Lighting", "Dimmable"]
 
