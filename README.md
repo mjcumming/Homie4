@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="https://github.com/mjcumming/homie4">
+    <img width=100% src="assets/Works%20with%20Homie.png">
+  </a>
+</p>
+
+
 # Homie
 
 Python 3 implementation of Homie 4.0.0
