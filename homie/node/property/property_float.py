@@ -38,9 +38,9 @@ class Property_Float(Property_Base):
         )
 
         if data_format:
-            range = data_format.split(":")
-            self.low_value = float(range[0])
-            self.high_value = float(range[1])
+            _range = data_format.split(":")
+            self.low_value = float(_range[0])
+            self.high_value = float(_range[1])
         else:
             self.low_value = None
             self.high_value = None

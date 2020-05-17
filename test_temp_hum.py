@@ -5,14 +5,14 @@ import time
 from homie.device_temperature_humidity import Device_Temperature_Humidity
 
 mqtt_settings = {
-    "MQTT_BROKER": "QueenMQTT",
+    "MQTT_BROKER": "OpenHAB",
     "MQTT_PORT": 1883,
 }
 
 
 try:
 
-    temp_hum = Device_Temperature_Humidity(name="Temp Hum", mqtt_settings=mqtt_settings)
+    temp_hum = Device_Temperature_Humidity(name="Test Temp Hum", mqtt_settings=mqtt_settings)
 
     while True:
         temp_hum.update_temperature(50)
