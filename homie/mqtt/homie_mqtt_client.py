@@ -17,6 +17,7 @@ MQTT_SETTINGS = {
     "MQTT_KEEPALIVE": 60,
     "MQTT_CLIENT_ID": None,
     "MQTT_SHARE_CLIENT": None,
+    "MQTT_USE_TLS": False,
 }
 
 mqtt_client_count = 0
