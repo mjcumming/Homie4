@@ -1,7 +1,7 @@
-from .property_integer import Property_Integer
+from .property_float import Property_Float
 
 
-class Property_Humidity(Property_Integer):
+class Property_Humidity(Property_Float):
     def __init__(
         self,
         node,

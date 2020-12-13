@@ -8,33 +8,24 @@ logger = logging.getLogger(__name__)
 
 
 class Repeating_Timer(object):
-    DEFAULT_INTERVAL_REDUCTION = 0.9
 
     """Repeat `function` every `interval` seconds."""
 
     def __init__(self, interval):
-        self.interval = int(interval * self.DEFAULT_INTERVAL_REDUCTION)
-
-        self.start = time.time()
+        self.interval = float(interval)
         self.event = Event()
-
         self.thread = Thread(target=self._target)
-        self.thread.setDaemon(True)
+        self.thread.daemon = True
         self.thread.start()
-
         self.callbacks = []
 
     def _target(self):
-        while not self.event.wait(self._time):
+        while not self.event.wait(self.interval):
             for callback in self.callbacks:
                 try:
                     callback()
                 except Exception as e:
                     logger.error("Error in timer callback: {}  {}".format(e,traceback.format_exc()))
-
-    @property
-    def _time(self):
-        return self.interval - ((time.time() - self.start) % self.interval)
 
     def add_callback(self, callback):
         self.callbacks.append(callback)
