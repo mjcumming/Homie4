@@ -273,6 +273,7 @@ class Device_Base(object):
         if connected:
             if self._mqtt_connected is False:
                 self._mqtt_connected = True
+                self.state = "init" # publish init state
                 self.publish_attributes()
                 self.publish_nodes()
                 self.subscribe_topics()
