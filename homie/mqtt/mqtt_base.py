@@ -17,16 +17,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-MQTT_SETTINGS = {
-    "MQTT_BROKER": None,
-    "MQTT_PORT": 1883,
-    "MQTT_USERNAME": None,
-    "MQTT_PASSWORD": None,
-    "MQTT_KEEPALIVE": 60,
-    "MQTT_CLIENT_ID": None,
-    "MQTT_SHARE_CLIENT": False,
-}
-
 
 class MQTT_Base(object):
     def __init__(self, mqtt_settings, last_will):

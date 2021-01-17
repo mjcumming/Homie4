@@ -1,18 +1,17 @@
-from .property_float import Property_Float
+from homie.node.property.property_float import Property_Float
 
-
-class Property_Humidity(Property_Float):
+class Property_Pressure(Property_Float):
     def __init__(
         self,
         node,
-        id="humidity",
-        name="Humidity",
+        id="pressure",
+        name="Pressure",
         settable=False,
         retained=True,
         qos=1,
-        unit="%",
+        unit="Pa",
         data_type=None,
-        data_format="0:100",
+        data_format=None,
         value=None,
         set_value=None,
         tags=[],
@@ -34,4 +33,3 @@ class Property_Humidity(Property_Float):
             tags,
             meta,
         )
-
