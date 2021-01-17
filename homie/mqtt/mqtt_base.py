@@ -109,7 +109,7 @@ class MQTT_Base(object):
 
     def _on_disconnect(self, rc):
         logger.warning("MQTT On Disconnect: Result Code {}".format(rc))
-        self.mqtt_connected(False)
+        self.connected = False
 
     def add_device(self, device):
         self.homie_devices.append(device)
