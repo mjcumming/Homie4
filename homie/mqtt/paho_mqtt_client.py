@@ -54,6 +54,8 @@ class PAHO_MQTT_Client(MQTT_Base):
                 self.mqtt_settings["MQTT_USERNAME"],
                 password=self.mqtt_settings["MQTT_PASSWORD"],
             )
+        if self.mqtt_settings["MQTT_USE_TLS"]:
+            self.mqtt_client.tls_set()
 
         try:
             self.mqtt_client.connect(
@@ -61,21 +63,11 @@ class PAHO_MQTT_Client(MQTT_Base):
                 port=self.mqtt_settings["MQTT_PORT"],
                 keepalive=self.mqtt_settings["MQTT_KEEPALIVE"],
             )
-
             self.mqtt_client.loop_start()
 
         except Exception as e:
             logger.warning("MQTT Unable to connect to Broker {}".format(e))
 
-        self.mqtt_client.on_connect = self._on_connect
-        self.mqtt_client.on_message = self._on_message
-        self.mqtt_client.on_disconnect = self._on_disconnect
-
-        if self.mqtt_settings["MQTT_USERNAME"]:
-            self.mqtt_client.username_pw_set(
-                self.mqtt_settings["MQTT_USERNAME"],
-                password=self.mqtt_settings["MQTT_PASSWORD"],
-            )
 
         def start():
             try:
