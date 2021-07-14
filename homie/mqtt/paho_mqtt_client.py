@@ -36,8 +36,21 @@ class PAHO_MQTT_Client(MQTT_Base):
     def connect(self):
         MQTT_Base.connect(self)
 
+        self.mqtt_transport = "tcp"
+
+        if "MQTT_TRANSPORT" in self.mqtt_settings:  
+            if (self.mqtt_settings["MQTT_TRANSPORT"] in ["tcp","websockets"]):
+                self.mqtt_transport = self.mqtt_settings["MQTT_TRANSPORT"]
+            else:
+                logger.warning("MQTT transport {} not supported, falling back to TCP".format(self.mqtt_settings["MQTT_TRANSPORT"]))
+        
+        # If Websocket path is set, assume websockets transport
+        if "MQTT_WS_PATH" in self.mqtt_settings:  
+            self.mqtt_transport = "websockets"
+
         self.mqtt_client = mqtt_client.Client(
             client_id=self.mqtt_settings["MQTT_CLIENT_ID"],
+            transport=self.mqtt_transport
             #clean_session=0
         )
         self.mqtt_client.on_connect = self._on_connect
@@ -49,11 +62,15 @@ class PAHO_MQTT_Client(MQTT_Base):
 
         self.set_will(self.last_will,"lost",True,1)
 
+        if "MQTT_WS_PATH" in self.mqtt_settings:  
+            self.mqtt_client.ws_set_options(path=self.mqtt_settings["MQTT_WS_PATH"])
+
         if self.mqtt_settings["MQTT_USERNAME"]:
             self.mqtt_client.username_pw_set(
                 self.mqtt_settings["MQTT_USERNAME"],
                 password=self.mqtt_settings["MQTT_PASSWORD"],
             )
+        
         if self.mqtt_settings["MQTT_USE_TLS"]:
             self.mqtt_client.tls_set()
 
