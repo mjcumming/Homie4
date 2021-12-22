@@ -219,14 +219,18 @@ class Device_Base(object):
     def add_node(self, node):
         self.nodes[node.id] = node
 
-        if self.nodes_published:  # update, publish property changes
+        if self.state=="ready":
+            self.state="init"
             self.publish_nodes(self.retained, self.qos)
+            self.state="ready"
 
     def remove_node(self, node_id):  # not tested, needs work removing topics
         del self.nodes[node_id]
 
-        if self.nodes_published:  # update, publish property changes
+        if self.state=="ready":
+            self.state="init"
             self.publish_nodes(retain=False)
+            self.state="ready"
 
     def get_node(self, node_id):
         if node_id in self.nodes:

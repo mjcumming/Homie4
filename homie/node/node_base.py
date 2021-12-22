@@ -34,16 +34,21 @@ class Node_Base(object):
 
         self.properties[property_.id] = property_
 
-        if self.published:  # need to update publish property changes
+        if self.device.state=="ready":
+            self.device.state="init"
             self.publish_properties()
+            self.device.state="ready"
 
     def remove_property(self, property_id):
         property_ = self.properties[property_id]
         del self.properties[property_id]
 
-        if self.device.start_time is not None:  # running, publish property changes
+        if self.device.state=="ready":
+#        if self.device.start_time is not None:  # running, publish property changes
+            self.device.state="init"
             self.publish_properties()
             property_.publish_attributes(False, 1)
+            self.device.state="ready"
 
     def get_property(self, property_id):
         if property_id in self.properties:
