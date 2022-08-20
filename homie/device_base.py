@@ -2,8 +2,8 @@
 
 import sys
 import time
-import atexit
-import signal
+#import atexit
+#import signal
 from datetime import datetime
 
 import homie
