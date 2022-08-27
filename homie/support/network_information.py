@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-import netifaces
+#import netifaces
 import socket
 
 logger = logging.getLogger(__name__)

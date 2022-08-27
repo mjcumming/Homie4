@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Homie4",
-    version="0.3.9",
+    version="0.4.0",
     description="Homie 4.0.0 Implementation",
     author="Michael Cumming",
     author_email="mike@4831.com",
@@ -21,5 +21,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=["paho-mqtt>=1.3.0", "netifaces>=0.10.6"],
+    install_requires=["paho-mqtt>=1.3.0"],
 )

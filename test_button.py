@@ -5,7 +5,7 @@ import time
 from homie.device_button import Device_Button
 
 mqtt_settings = {
-    "MQTT_BROKER": "OPENHAB",
+    "MQTT_BROKER": "192.168.1.81",
     "MQTT_PORT": 1883,
 }
 

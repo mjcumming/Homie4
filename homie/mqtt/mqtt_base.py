@@ -8,9 +8,9 @@ Base MQTT Client for a Homie device
 To allow for easy use of different MQTT clients
 
 """
-from homie.support.network_information import Network_Information
+#from homie.support.network_information import Network_Information
 
-network_info = Network_Information()
+#network_info = Network_Information()
 
 import logging
 
@@ -74,6 +74,7 @@ class MQTT_Base(object):
         logger.info("MQTT set will {}, topic {}".format(will, topic))
 
     def get_mac_ip_address(self):
+        '''
         if self.ip_address is None:
             self.ip_address = network_info.get_local_ip(
                 self.mqtt_settings["MQTT_BROKER"], self.mqtt_settings["MQTT_PORT"]
@@ -83,6 +84,8 @@ class MQTT_Base(object):
             self.mac_address = network_info.get_local_mac_for_ip(self.ip_address)
 
         return self.mac_address, self.ip_address
+        '''
+        return "NoMAC","NoIP"
 
     def _on_message(self, topic, payload, retain, qos):
         logger.debug(
