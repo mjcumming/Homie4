@@ -72,7 +72,7 @@ class PAHO_MQTT_Client(MQTT_Base):
             )
         
         if self.mqtt_settings["MQTT_USE_TLS"]:
-            self.mqtt_client.tls_set()
+            self.mqtt_client.tls_set(**self.mqtt_settings["MQTT_TLS_OPTIONS"])
 
         try:
             self.mqtt_client.connect(

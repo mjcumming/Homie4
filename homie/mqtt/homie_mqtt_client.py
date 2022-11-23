@@ -18,6 +18,7 @@ MQTT_SETTINGS = {
     "MQTT_CLIENT_ID": None,
     "MQTT_SHARE_CLIENT": None,
     "MQTT_USE_TLS": False,
+    'MQTT_TLS_OPTIONS' : dict()
 }
 
 mqtt_client_count = 0
