@@ -49,6 +49,7 @@ class PAHO_MQTT_Client(MQTT_Base):
             self.mqtt_transport = "websockets"
 
         self.mqtt_client = mqtt_client.Client(
+            callback_api_version=mqtt_client.CallbackAPIVersion.VERSION2,
             client_id=self.mqtt_settings["MQTT_CLIENT_ID"],
             transport=self.mqtt_transport
             #clean_session=0
@@ -127,29 +128,29 @@ class PAHO_MQTT_Client(MQTT_Base):
         MQTT_Base.set_will(self, will, topic, retain, qos)
         self.mqtt_client.will_set(will, topic, retain, qos)
 
-    def _on_connect(self, client, userdata, flags, rc):
-        logger.debug("MQTT On Connect: Result code {}, Flags {}".format(rc,flags))
-        self.mqtt_connected = rc == 0
+    def _on_connect(self, client, userdata, flags, reason_code, properties):
+        logger.debug("MQTT On Connect: Result code {}, Flags {}".format(reason_code,flags))
+        self.mqtt_connected = reason_code == 0
 
     def _on_message(self, client, userdata, msg):
         topic = msg.topic
         payload = msg.payload.decode("utf-8")
         MQTT_Base._on_message(self, topic, payload, msg.retain, msg.qos)
 
-    def _on_disconnect(self, client, userdata, rc):
+    def _on_disconnect(self, client, userdata, reason_code, properties):
         self.mqtt_connected = False  # note, change this uses the property setter, do not really need to catch this in the base class
 
-        if rc > 0:  # unexpected disconnect
-            rc_text = "Unknown result code {}".format(rc)
-            if rc in COONNECTION_RESULT_CODES:
-                rc_text = COONNECTION_RESULT_CODES[rc]
+        if reason_code > 0:  # unexpected disconnect
+            rc_text = "Unknown result code {}".format(reason_code)
+            if reason_code in COONNECTION_RESULT_CODES:
+                rc_text = COONNECTION_RESULT_CODES[reason_code]
 
             logger.warning(
                 "MQTT Unexpected disconnection  {} {} {}".format(
                     client, userdata, rc_text
                 )
             )
-        MQTT_Base._on_disconnect(self, rc)
+        MQTT_Base._on_disconnect(self, reason_code)
 
     def close(self):
         MQTT_Base.close(self)
